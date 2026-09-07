@@ -2,9 +2,9 @@
 
 <div class="repllm-hero">
 <p class="eyebrow">Research software · R package</p>
-<p class="hero-title">Choose names.<br>Use validation evidence.</p>
-<p class="hero-summary">View, load, and select validated names for experimental studies on race and ethnicity.</p>
-<p class="hero-links"><a class="hero-primary" href="#installation">Get started ↗</a><a href="reference/index.html">Explore the reference →</a></p>
+<p class="hero-title">Choose names for your experiment.</p>
+<p class="hero-summary">We built validatednamesr to help choose experimental names using evidence about how people perceive them.</p>
+<p class="hero-links"><a class="hero-primary" href="#installation">Get started ↗</a><a href="reference/index.html">See the functions →</a></p>
 <p class="hero-meta">Jae Yeon Kim and Charles Crabtree</p>
 </div>
 
@@ -14,9 +14,9 @@
 
 **Human – AI (editor) 👤✏️🤖**
 
-All initial versions were created entirely by the human authors, without AI.
-AI was used only for subsequent updates and code fixes. This provenance
-declaration is supplied by Charles Crabtree.
+We wrote every initial version ourselves, without AI. We've used AI only for
+later updates and code fixes. I'm Charles Crabtree, and this is my account of
+how the package was made.
 
 The label follows [The Latent Review’s provenance standard](https://thelatentreview.com/provenance/),
 shared under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
@@ -25,21 +25,24 @@ The software remains MIT licensed.
 This documentation copy is maintained by Charles Crabtree. The
 [upstream package](https://github.com/jaeyk/validatednamesr) and
 [original documentation](https://jaeyk.github.io/validatednamesr/)
-are maintained by Jae Yeon Kim. Package code and reference entries are reproduced
-from the upstream source without changes.
+are maintained by Jae Yeon Kim. Package code comes from the pinned upstream source. I've edited the explanatory
+text in this documentation copy; the function arguments and behaviour are unchanged.
 
 
 Authors: [Jae Yeon Kim](https://jaeyk.github.io/) and [Charles Crabtree](https://charlescrabtree.com/)
 
-## Summary 
-    
-Researchers have used names to indicate race in various experimental tasks such as surveys, conjoint experiments, and correspondence experiments. When doing so, researchers must consider at least the following three factors:
+## Why we built it
 
-- Choose names that vary by race but remain constant across other perceived attributes, or choose names that vary by race and other perceived attributes.
-- Use not only one but several names to increase reliability.
-- Use names that indicate differences in citizenship, education, and income within and across races to explore.
+A name can signal more than the racial category a researcher intends. People
+may also make assumptions about citizenship, education, or income. We want to
+see those perceptions before choosing names for an experiment.
 
-This R package provides functions to perform each task based on a validated dataset of 600 names (100 white, 300 Asian, 100 black, and 100 Hispanic) published in *Nature Scientific Data* ([Crabtree, Kim, Gaddis, Holbein, Guage, and Marx, 2023](https://www.nature.com/articles/s41597-023-01947-0#Sec10)). It helps researchers choose names in an experimental study that are consistent with their research objectives and underlying assumptions.
+This R package provides functions to perform each task based on a validated dataset of 600 names (100 white, 300 Asian, 100 black, and 100 Hispanic) published in *Nature Scientific Data* ([Crabtree, Kim, Gaddis, Holbein, Guage, and Marx, 2023](https://www.nature.com/articles/s41597-023-01947-0#Sec10)).
+
+Use several names per group, then check whether their perceived attributes fit
+your design. You might want similar income ratings across racial groups, or
+you might want to vary both. The package helps you select names under those
+constraints; the design decision is yours.
 
 ## Installation 
 
@@ -51,74 +54,69 @@ devtools::install_github("jaeyk/validatednamesr", dependencies = TRUE)
 
 ### View and load datasets 
 
-1. `view_data()`: This function views the dataset's filename, type, and notes (metadata). 
+Start with `view_data()` to see the available files and their descriptions.
 
 ``` r
+library(validatednamesr)
 view_data()
+```
 
-#>            filename    type          notes
-#> 1         names.rds   Names      Raw names
-#> 2 study-1-names.rds Studies Study 1 result
-#> 3 study-2-names.rds Studies Study 2 result
-#> 4 study-3-names.rds Studies Study 3 result
-#> 5      study123.rds  Pooled  Pooled result
-````
-
-2. `load_data()`: This function loads a particular dataset. Use either the `file_name` or `file_note` argument.
+Use `load_data()` to read one of those files. You can identify it by filename or note.
 
 ``` r
-# The following two commands will provide the same output.
-
-#file name
+# Read by filename
 raw_names <- load_data(file_name = "names.rds")
 
-# file note 
+# Or read the same file by its note
 raw_names <- load_data(file_note = "Raw names")
 ```
 
 ### Select names 
 
-The `select_names()` function helps to choose the validated names that are intended to signal a particular race using the `race` argument. The options available for this argument are: `Asian,` `Black,` `Hispanic,` `White.`
+Pass `"Asian"`, `"Black"`, `"Hispanic"`, or `"White"` to `race` in `select_names()`. These are the intended signals used in the study.
 
-The output of this data is a dataframe with nine columns: `first` (first name), `last` = last name, `w.asian` = westernized Asian name (1 = yes, 0 = no), `name` (full name), `identity` (the name's intended race), `mean_correct` = the percentage of the name's intended race correctly perceived (0-1), `avg_income` = average perceived income level (1-5), `avg_education` = average perceived education level (1-5), `avg_citizenship` = the percentage of perceived citizenship status (0-1).
+The pinned package returns six columns: `name`, `identity`, `pct_correct`,
+`avg_income`, `avg_education`, and `avg_citizenship`. The first two identify
+the name and its intended signal. `pct_correct` is the share who perceived that
+signal. Income and education are average ratings on 1–5 scales; citizenship
+is a share on a 0–1 scale.
 
 ``` r
 asian_names <- select_names(race = "Asian") # Asian signalling names 
 
-asian_names 
-
-#>   first last  w.asian name      identity       mean_correct avg_income avg_education avg_citizenship
-#>   <chr> <chr>   <dbl> <chr>     <fct>            <dbl>   <dbl>   <dbl>   <dbl>
-#> 1 Dan   Yang        1 Dan Yang  Asian or Paci…   0.848    2.09    2.55   0.773
-#> 2 Hong  Pham        0 Hong Pham Asian or Paci…   0.826    1.94    2.28   0.465
-#> 3 May   Chen        1 May Chen  Asian or Paci…   0.878    2.07    2.37   0.789
-#> 4 Hong  Le          0 Hong Le   Asian or Paci…   0.816    1.97    2.42   0.539
-#> 5 Wei   Le          0 Wei Le    Asian or Paci…   0.806    1.93    2.18   0.418
+asian_names
 ```
 
-You can change the threshold level of the names to be correctly perceived using the `pct_correct` argument. The default value for this argument is `0.8.`
+By default, at least 80% of respondents must have perceived the intended racial signal. Set `pct_correct` to change that threshold.
 
 ``` r
-# change the threshold level of the names to be correctly perceived from 0.8 (the default value) to 0.7
+# Lower the required share from 80% to 70%.
 
-high_thres_names <- select_names(race = "Asian", pct_correct = 0.7)
+lower_threshold_names <- select_names(race = "Asian", pct_correct = 0.7)
 ```
 
-You can also change the number of the names to be selected using the `n_names` argument. The default value for this argument is `5.` These names will be selected randomly.  
+The function samples five names by default. Set `n_names` to request more, and set a random seed if you need to reproduce the selection.
 
 ``` r
-# change the number of the names to be selected from 5 (the default value) to 10 
+# Sample ten eligible names.
+set.seed(42)
 
 greater_n_names <- select_names(race = "Asian", n_names = 10)
 ```
 
-Rather than using random sampling, it is possible to select names by ordering them according to a chosen variable. This is done by specifying the `order_by_var` argument. The values available for it are: `pct_correct` = the percentage of the name's intended race correctly perceived, `avg_income` = average perceived income level, `avg_education` = average perceived education level, and `avg_citizenship` = the percentage of perceived citizenship status. 
+You can order eligible names by a validation measure with `order_by_var`.
+Use `pct_correct` for the share who perceived the intended racial signal,
+`avg_income` or `avg_education` for average ratings, or `avg_citizenship` for
+the share perceived as citizens. It selects the highest values and keeps ties, so an ordered result can contain more than `n_names` rows.
 
 ``` r
-top_correct_names <- select_names(race = "Asian", order_by = "pct_correct")
+top_correct_names <- select_names(race = "Asian", order_by_var = "pct_correct")
 ```
 
-Finally, if you would like to select the names from all racial groups, use `select_nams_all()` instead of `select_names().` Note that `select_names_all()` does not have the `race` argument, but all the other arguments are identical. 
+`select_names_all()` combines the four racial groups using the default
+selection for each. In this pinned version, it accepts selection arguments
+but doesn't pass them to `select_names()`. Call `select_names()` separately
+for each group if you want to change the threshold, ordering, or sample size.
 
 ``` r
 all_race_names <- select_names_all()

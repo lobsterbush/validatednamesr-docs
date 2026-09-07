@@ -1,4 +1,4 @@
-"""Build an isolated documentation copy from a pinned, unchanged upstream package."""
+"""Build an isolated documentation copy from pinned upstream code with local documentation overlays."""
 from pathlib import Path
 import shutil
 import subprocess
@@ -20,6 +20,8 @@ def main() -> None:
         shutil.move(str(source / 'docs'), str(build / 'upstream_docs'))
     shutil.copytree('site', source / 'pkgdown', dirs_exist_ok=True)
     shutil.copy2('site/_pkgdown.yml', source / '_pkgdown.yml')
+    for help_file in Path('site/reference').glob('*.Rd'):
+        shutil.copy2(help_file, source / 'man' / help_file.name)
     (source / 'man/figures').mkdir(exist_ok=True)
     shutil.copy2('site/figures/provenance.svg', source / 'man/figures/provenance.svg')
     script = source / 'build_docs.R'

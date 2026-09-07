@@ -56,13 +56,13 @@
 Research software · R package
 </p>
 <p class="hero-title">
-Choose names.<br>Use validation evidence.
+Choose names for your experiment.
 </p>
 <p class="hero-summary">
-View, load, and select validated names for experimental studies on race and ethnicity.
+We built validatednamesr to help choose experimental names using evidence about how people perceive them.
 </p>
 <p class="hero-links">
-<a class="hero-primary" href="#installation">Get started ↗</a><a href="reference/index.html">Explore the reference →</a>
+<a class="hero-primary" href="#installation">Get started ↗</a><a href="reference/index.html">See the functions →</a>
 </p>
 <p class="hero-meta">
 Jae Yeon Kim and Charles Crabtree
@@ -73,21 +73,17 @@ Jae Yeon Kim and Charles Crabtree
 <h2 id="provenance">Provenance<a class="anchor" aria-label="anchor" href="#provenance"></a>
 </h2>
 <p><strong>Human – AI (editor) 👤✏️🤖</strong></p>
-<p>All initial versions were created entirely by the human authors, without AI. AI was used only for subsequent updates and code fixes. This provenance declaration is supplied by Charles Crabtree.</p>
+<p>We wrote every initial version ourselves, without AI. We’ve used AI only for later updates and code fixes. I’m Charles Crabtree, and this is my account of how the package was made.</p>
 <p>The label follows <a href="https://thelatentreview.com/provenance/" class="external-link">The Latent Review’s provenance standard</a>, shared under <a href="https://creativecommons.org/licenses/by/4.0/" class="external-link">CC BY 4.0</a>. The software remains MIT licensed.</p>
-<p>This documentation copy is maintained by Charles Crabtree. The <a href="https://github.com/jaeyk/validatednamesr" class="external-link">upstream package</a> and <a href="https://jaeyk.github.io/validatednamesr/" class="external-link">original documentation</a> are maintained by Jae Yeon Kim. Package code and reference entries are reproduced from the upstream source without changes.</p>
+<p>This documentation copy is maintained by Charles Crabtree. The <a href="https://github.com/jaeyk/validatednamesr" class="external-link">upstream package</a> and <a href="https://jaeyk.github.io/validatednamesr/" class="external-link">original documentation</a> are maintained by Jae Yeon Kim. Package code comes from the pinned upstream source. I’ve edited the explanatory text in this documentation copy; the function arguments and behaviour are unchanged.</p>
 <p>Authors: <a href="https://jaeyk.github.io/" class="external-link">Jae Yeon Kim</a> and <a href="https://charlescrabtree.com/" class="external-link">Charles Crabtree</a></p>
 </div>
 <div class="section level2">
-<h2 id="summary">Summary<a class="anchor" aria-label="anchor" href="#summary"></a>
+<h2 id="why-we-built-it">Why we built it<a class="anchor" aria-label="anchor" href="#why-we-built-it"></a>
 </h2>
-<p>Researchers have used names to indicate race in various experimental tasks such as surveys, conjoint experiments, and correspondence experiments. When doing so, researchers must consider at least the following three factors:</p>
-<ul>
-<li>Choose names that vary by race but remain constant across other perceived attributes, or choose names that vary by race and other perceived attributes.</li>
-<li>Use not only one but several names to increase reliability.</li>
-<li>Use names that indicate differences in citizenship, education, and income within and across races to explore.</li>
-</ul>
-<p>This R package provides functions to perform each task based on a validated dataset of 600 names (100 white, 300 Asian, 100 black, and 100 Hispanic) published in <em>Nature Scientific Data</em> (<a href="https://www.nature.com/articles/s41597-023-01947-0#Sec10" class="external-link">Crabtree, Kim, Gaddis, Holbein, Guage, and Marx, 2023</a>). It helps researchers choose names in an experimental study that are consistent with their research objectives and underlying assumptions.</p>
+<p>A name can signal more than the racial category a researcher intends. People may also make assumptions about citizenship, education, or income. We want to see those perceptions before choosing names for an experiment.</p>
+<p>This R package provides functions to perform each task based on a validated dataset of 600 names (100 white, 300 Asian, 100 black, and 100 Hispanic) published in <em>Nature Scientific Data</em> (<a href="https://www.nature.com/articles/s41597-023-01947-0#Sec10" class="external-link">Crabtree, Kim, Gaddis, Holbein, Guage, and Marx, 2023</a>).</p>
+<p>Use several names per group, then check whether their perceived attributes fit your design. You might want similar income ratings across racial groups, or you might want to vary both. The package helps you select names under those constraints; the design decision is yours.</p>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -101,63 +97,42 @@ Jae Yeon Kim and Charles Crabtree
 <div class="section level3">
 <h3 id="view-and-load-datasets">View and load datasets<a class="anchor" aria-label="anchor" href="#view-and-load-datasets"></a>
 </h3>
-<ol style="list-style-type: decimal">
-<li>
-<code><a href="reference/view_data.html">view_data()</a></code>: This function views the dataset’s filename, type, and notes (metadata).</li>
-</ol>
+<p>Start with <code><a href="reference/view_data.html">view_data()</a></code> to see the available files and their descriptions.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/view_data.html">view_data</a></span><span class="op">(</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co">#&gt;            filename    type          notes</span></span>
-<span><span class="co">#&gt; 1         names.rds   Names      Raw names</span></span>
-<span><span class="co">#&gt; 2 study-1-names.rds Studies Study 1 result</span></span>
-<span><span class="co">#&gt; 3 study-2-names.rds Studies Study 2 result</span></span>
-<span><span class="co">#&gt; 4 study-3-names.rds Studies Study 3 result</span></span>
-<span><span class="co">#&gt; 5      study123.rds  Pooled  Pooled result</span></span></code></pre></div>
-<ol start="2" style="list-style-type: decimal">
-<li>
-<code><a href="reference/load_data.html">load_data()</a></code>: This function loads a particular dataset. Use either the <code>file_name</code> or <code>file_note</code> argument.</li>
-</ol>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">validatednamesr</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/view_data.html">view_data</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>Use <code><a href="reference/load_data.html">load_data()</a></code> to read one of those files. You can identify it by filename or note.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># The following two commands will provide the same output.</span></span>
-<span></span>
-<span><span class="co">#file name</span></span>
+<code class="sourceCode R"><span><span class="co"># Read by filename</span></span>
 <span><span class="va">raw_names</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/load_data.html">load_data</a></span><span class="op">(</span>file_name <span class="op">=</span> <span class="st">"names.rds"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># file note </span></span>
+<span><span class="co"># Or read the same file by its note </span></span>
 <span><span class="va">raw_names</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/load_data.html">load_data</a></span><span class="op">(</span>file_note <span class="op">=</span> <span class="st">"Raw names"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="select-names">Select names<a class="anchor" aria-label="anchor" href="#select-names"></a>
 </h3>
-<p>The <code><a href="reference/select_names.html">select_names()</a></code> function helps to choose the validated names that are intended to signal a particular race using the <code>race</code> argument. The options available for this argument are: <code>Asian,</code> <code>Black,</code> <code>Hispanic,</code> <code>White.</code></p>
-<p>The output of this data is a dataframe with nine columns: <code>first</code> (first name), <code>last</code> = last name, <code>w.asian</code> = westernized Asian name (1 = yes, 0 = no), <code>name</code> (full name), <code>identity</code> (the name’s intended race), <code>mean_correct</code> = the percentage of the name’s intended race correctly perceived (0-1), <code>avg_income</code> = average perceived income level (1-5), <code>avg_education</code> = average perceived education level (1-5), <code>avg_citizenship</code> = the percentage of perceived citizenship status (0-1).</p>
+<p>Pass <code>"Asian"</code>, <code>"Black"</code>, <code>"Hispanic"</code>, or <code>"White"</code> to <code>race</code> in <code><a href="reference/select_names.html">select_names()</a></code>. These are the intended signals used in the study.</p>
+<p>The pinned package returns six columns: <code>name</code>, <code>identity</code>, <code>pct_correct</code>, <code>avg_income</code>, <code>avg_education</code>, and <code>avg_citizenship</code>. The first two identify the name and its intended signal. <code>pct_correct</code> is the share who perceived that signal. Income and education are average ratings on 1–5 scales; citizenship is a share on a 0–1 scale.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">asian_names</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/select_names.html">select_names</a></span><span class="op">(</span>race <span class="op">=</span> <span class="st">"Asian"</span><span class="op">)</span> <span class="co"># Asian signalling names </span></span>
 <span></span>
-<span><span class="va">asian_names</span> </span>
-<span></span>
-<span><span class="co">#&gt;   first last  w.asian name      identity       mean_correct avg_income avg_education avg_citizenship</span></span>
-<span><span class="co">#&gt;   &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;     &lt;fct&gt;            &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 Dan   Yang        1 Dan Yang  Asian or Paci…   0.848    2.09    2.55   0.773</span></span>
-<span><span class="co">#&gt; 2 Hong  Pham        0 Hong Pham Asian or Paci…   0.826    1.94    2.28   0.465</span></span>
-<span><span class="co">#&gt; 3 May   Chen        1 May Chen  Asian or Paci…   0.878    2.07    2.37   0.789</span></span>
-<span><span class="co">#&gt; 4 Hong  Le          0 Hong Le   Asian or Paci…   0.816    1.97    2.42   0.539</span></span>
-<span><span class="co">#&gt; 5 Wei   Le          0 Wei Le    Asian or Paci…   0.806    1.93    2.18   0.418</span></span></code></pre></div>
-<p>You can change the threshold level of the names to be correctly perceived using the <code>pct_correct</code> argument. The default value for this argument is <code>0.8.</code></p>
+<span><span class="va">asian_names</span></span></code></pre></div>
+<p>By default, at least 80% of respondents must have perceived the intended racial signal. Set <code>pct_correct</code> to change that threshold.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># change the threshold level of the names to be correctly perceived from 0.8 (the default value) to 0.7</span></span>
+<code class="sourceCode R"><span><span class="co"># Lower the required share from 80% to 70%.</span></span>
 <span></span>
-<span><span class="va">high_thres_names</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/select_names.html">select_names</a></span><span class="op">(</span>race <span class="op">=</span> <span class="st">"Asian"</span>, pct_correct <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span></span></code></pre></div>
-<p>You can also change the number of the names to be selected using the <code>n_names</code> argument. The default value for this argument is <code>5.</code> These names will be selected randomly.</p>
+<span><span class="va">lower_threshold_names</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/select_names.html">select_names</a></span><span class="op">(</span>race <span class="op">=</span> <span class="st">"Asian"</span>, pct_correct <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span></span></code></pre></div>
+<p>The function samples five names by default. Set <code>n_names</code> to request more, and set a random seed if you need to reproduce the selection.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># change the number of the names to be selected from 5 (the default value) to 10 </span></span>
+<code class="sourceCode R"><span><span class="co"># Sample ten eligible names.</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span> </span>
 <span></span>
 <span><span class="va">greater_n_names</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/select_names.html">select_names</a></span><span class="op">(</span>race <span class="op">=</span> <span class="st">"Asian"</span>, n_names <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
-<p>Rather than using random sampling, it is possible to select names by ordering them according to a chosen variable. This is done by specifying the <code>order_by_var</code> argument. The values available for it are: <code>pct_correct</code> = the percentage of the name’s intended race correctly perceived, <code>avg_income</code> = average perceived income level, <code>avg_education</code> = average perceived education level, and <code>avg_citizenship</code> = the percentage of perceived citizenship status.</p>
+<p>You can order eligible names by a validation measure with <code>order_by_var</code>. Use <code>pct_correct</code> for the share who perceived the intended racial signal, <code>avg_income</code> or <code>avg_education</code> for average ratings, or <code>avg_citizenship</code> for the share perceived as citizens. It selects the highest values and keeps ties, so an ordered result can contain more than <code>n_names</code> rows.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">top_correct_names</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/select_names.html">select_names</a></span><span class="op">(</span>race <span class="op">=</span> <span class="st">"Asian"</span>, order_by <span class="op">=</span> <span class="st">"pct_correct"</span><span class="op">)</span></span></code></pre></div>
-<p>Finally, if you would like to select the names from all racial groups, use <code>select_nams_all()</code> instead of <code>select_names().</code> Note that <code><a href="reference/select_names_all.html">select_names_all()</a></code> does not have the <code>race</code> argument, but all the other arguments are identical.</p>
+<code class="sourceCode R"><span><span class="va">top_correct_names</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/select_names.html">select_names</a></span><span class="op">(</span>race <span class="op">=</span> <span class="st">"Asian"</span>, order_by_var <span class="op">=</span> <span class="st">"pct_correct"</span><span class="op">)</span></span></code></pre></div>
+<p><code><a href="reference/select_names_all.html">select_names_all()</a></code> combines the four racial groups using the default selection for each. In this pinned version, it accepts selection arguments but doesn’t pass them to <code><a href="reference/select_names.html">select_names()</a></code>. Call <code><a href="reference/select_names.html">select_names()</a></code> separately for each group if you want to change the threshold, ordering, or sample size.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">all_race_names</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/select_names_all.html">select_names_all</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
