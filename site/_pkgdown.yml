@@ -1,0 +1,26 @@
+url: https://lobsterbush.github.io/validatednamesr-docs/
+template:
+  bootstrap: 5
+  light-switch: false
+home:
+  title: "Validated names for experimental studies"
+  description: "View, load, and select validated names for experimental studies on race and ethnicity."
+navbar:
+  structure:
+    left: [start, reference]
+    right: [search, upstream, website]
+  components:
+    start:
+      text: Get started
+      href: index.html#installation
+    upstream:
+      text: Package source ↗
+      href: https://github.com/jaeyk/validatednamesr
+    website:
+      text: Charles Crabtree ↗
+      href: https://charlescrabtree.org/
+authors:
+  Charles Crabtree:
+    href: https://charlescrabtree.org/
+  Jae Yeon Kim:
+    href: https://jaeyk.github.io/
