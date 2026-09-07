@@ -16,6 +16,8 @@ def main() -> None:
     source = build / 'source'
     run(['git', 'clone', '--quiet', 'https://github.com/jaeyk/validatednamesr.git', str(source)], Path('.'))
     run(['git', 'checkout', '--quiet', '--detach', 'f80678c561256a4566898e514e516c265d308cdc'], source)
+    if (source / 'docs').exists():
+        shutil.move(str(source / 'docs'), str(build / 'upstream_docs'))
     shutil.copytree('site', source / 'pkgdown', dirs_exist_ok=True)
     shutil.copy2('site/_pkgdown.yml', source / '_pkgdown.yml')
     (source / 'man/figures').mkdir(exist_ok=True)
